@@ -10,17 +10,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Шаг 1: Клонируем репозиторий
+     
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Шаг 2: Устанавливаем Node.js
+      # Install Node.js
       - name: Install Node
         uses: actions/setup-node@v3
         with:
           node-version: "18.x"
 
-      # Шаг 3: Устанавливаем зависимости
+      # Install dependencies
       - name: Install dependencies
         run: npm install
 
@@ -41,20 +41,20 @@ jobs:
           done
           echo "Server failed to start" && exit 1
 
-      # Шаг 6: Устанавливаем newman и репортер
+      # Install newman and reporter
       - name: Install newman
         run: |
           npm install -g newman
           npm install -g newman-reporter-htmlextra
 
-      # Шаг 7: Создаем директорию для результатов
+      # Create directory for results
       - name: Make directory for results
         run: mkdir -p testResults
 
-      # Шаг 8: Запускаем коллекцию Postman
+      # Run Postman collection
       - name: Run POSTMAN collection
         run: |
-          newman run petstore.collection.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter-htmlextra-darktheme > testResults/runreport.html
+          newman run petstore.collection.json
 
       # Шаг 9: Загружаем результаты тестов
       - name: Output the run Details
