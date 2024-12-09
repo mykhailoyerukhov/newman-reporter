@@ -34,12 +34,29 @@ jobs:
       - name: Make directory for results
         run: mkdir -p testResults
 
+      # Start server
+      - name: Start server
+        run: npm run tern-on-api &
+
+      # wait for server 
+      - name: Wait for server to start
+        run: |
+          for i in {1..10}; do
+            if nc -z localhost 3000; then
+              echo "Server is up!"
+              exit 0
+            fi
+            echo "Waiting for server to start..."
+            sleep 2
+          done
+          echo "Server failed to start" && exit 1
+
       # Run Postman collection
       - name: Run POSTMAN collection
         run: |
            newman run store.collectionv2.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter -htmlextra-darktheme > testresults/runreport.html
 
-      # Шаг 9: Загружаем результаты тестов
+      # Upload results
       - name: Output the run Details
         uses: actions/upload-artifact@v3
         with:
