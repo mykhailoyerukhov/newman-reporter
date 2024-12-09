@@ -24,21 +24,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # Install newman and reporter
-      - name: Install newman
-        run: |
-          npm install -g newman
-          npm install -g newman-reporter-htmlextra
-
-      # Create directory for results
-      - name: Make directory for results
-        run: mkdir -p testResults
-
-            # Start server
+      # Шаг 4: Запускаем сервер в фоновом режиме
       - name: Start server
         run: npm run tern-on-api &
 
-      # wait for server 
+      # Шаг 5: Проверяем, что сервер работает
       - name: Wait for server to start
         run: |
           for i in {1..10}; do
@@ -50,13 +40,20 @@ jobs:
             sleep 2
           done
           echo "Server failed to start" && exit 1
+      # Install newman and reporter
+      - name: Install newman
+        run: |
+          npm install -g newman
+          npm install -g newman-reporter-htmlextra
+      # Create directory for results
+      - name: Make directory for results
+        run: mkdir -p testResults
 
       # Run Postman collection
       - name: Run POSTMAN collection
         run: |
-           newman run store.collection.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter
-
-      # Upload results
+          newman run store.collection.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html
+      # Шаг 9: Загружаем результаты тестов
       - name: Output the run Details
         uses: actions/upload-artifact@v3
         with:
