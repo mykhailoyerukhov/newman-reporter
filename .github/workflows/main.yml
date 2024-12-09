@@ -1,0 +1,64 @@
+name: Test-Build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs: 
+  test-api:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Шаг 1: Клонируем репозиторий
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Шаг 2: Устанавливаем Node.js
+      - name: Install Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+
+      # Шаг 3: Устанавливаем зависимости
+      - name: Install dependencies
+        run: npm install
+
+      # Шаг 4: Запускаем сервер в фоновом режиме
+      - name: Start server
+        run: npm run tern-on-api &
+
+      # Шаг 5: Проверяем, что сервер работает
+      - name: Wait for server to start
+        run: |
+          for i in {1..10}; do
+            if nc -z localhost 3000; then
+              echo "Server is up!"
+              exit 0
+            fi
+            echo "Waiting for server to start..."
+            sleep 2
+          done
+          echo "Server failed to start" && exit 1
+
+      # Шаг 6: Устанавливаем newman и репортер
+      - name: Install newman
+        run: |
+          npm install -g newman
+          npm install -g newman-reporter-htmlextra
+
+      # Шаг 7: Создаем директорию для результатов
+      - name: Make directory for results
+        run: mkdir -p testResults
+
+      # Шаг 8: Запускаем коллекцию Postman
+      - name: Run POSTMAN collection
+        run: |
+          newman run petstore.collection.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter-htmlextra-darktheme > testResults/runreport.html
+
+      # Шаг 9: Загружаем результаты тестов
+      - name: Output the run Details
+        uses: actions/upload-artifact@v3
+        with:
+          name: RunReports
+          path: testResults
