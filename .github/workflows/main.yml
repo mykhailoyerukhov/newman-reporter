@@ -24,23 +24,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # Шаг 4: Запускаем сервер в фоновом режиме
-      - name: Start server
-        run: npm run tern-on-api &
-
-      # Шаг 5: Проверяем, что сервер работает
-      - name: Wait for server to start
-        run: |
-          for i in {1..10}; do
-            if nc -z localhost 3000; then
-              echo "Server is up!"
-              exit 0
-            fi
-            echo "Waiting for server to start..."
-            sleep 2
-          done
-          echo "Server failed to start" && exit 1
-
       # Install newman and reporter
       - name: Install newman
         run: |
@@ -54,7 +37,7 @@ jobs:
       # Run Postman collection
       - name: Run POSTMAN collection
         run: |
-          newman run store.collection.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html
+           newman run store.collectionv2.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter -htmlextra-darktheme > testresults/runreport.html
 
       # Шаг 9: Загружаем результаты тестов
       - name: Output the run Details
