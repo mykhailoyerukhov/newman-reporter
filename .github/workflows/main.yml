@@ -53,7 +53,7 @@ jobs:
       # Run Postman collection
       - name: Run POSTMAN collection
         run: |
-          newman run store.collection.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter-htmlextra-darkTheme  > testResults/runreport1.html
+          newman run petstore.collection.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter-htmlextra-darkTheme  > testResults/runreport1.html
       # Шаг 9: Загружаем результаты тестов
       - name: Output the run Details
         uses: actions/upload-artifact@v3
