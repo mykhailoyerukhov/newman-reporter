@@ -54,7 +54,7 @@ jobs:
       # Run Postman collection
       - name: Run POSTMAN collection
         run: |
-           newman run store.collection.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter -htmlextra-darktheme > testresults/runreport.html
+           newman run store.collection.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter
 
       # Upload results
       - name: Output the run Details
