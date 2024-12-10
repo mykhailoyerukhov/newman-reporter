@@ -17,11 +17,6 @@ products:
     price: 30
     sku: 999921312423312
     description: awesome
-  - name: banana
-    price: 155
-    sku: 123321123
-    description: changed description
-    id: 4
 orders:
   - id: 1
     name: order1
@@ -114,3 +109,21 @@ users:
     signUpDate: 2019-08-24
     status: active
     level: consumer
+  - firstName: Ilon
+    lastName: Tusk
+    email: false
+    dateOfBirth: 2001-10-99
+    emailVerified: true
+    signUpDate: 2019-08-24
+    status: active
+    level: lord
+    id: 10
+  - firstName: Daniel
+    lastName: Craig
+    email: daniel.craig345@gmail.com
+    dateOfBirth: 2002-01-85
+    emailVerified: true
+    signUpDate: 2017-06-21
+    status: active
+    level: user
+    id: 11
